@@ -1,0 +1,87 @@
+.login {
+  display: flex;
+  flex-direction: column;
+  color: #6879BB;
+
+    & input {
+    margin: 7px 0;
+    height: 36px;
+    padding: 6px 12px;
+    box-sizing: border-box;
+    border: 1px solid #D6DCE9;
+    border-radius: 4px;
+    background-color: white;
+    color: #6879BB;
+    outline: none;
+
+    &:hover, &:focus {
+      border-color: #415FD5;
+      color: #415FD5;
+    }
+
+    &:disabled {
+      background: #F5F5F5;
+      border-color: #D6DCE9;
+    }
+
+    &.error {
+      border-color: red;
+    }
+  }
+
+  & button {
+    margin: 18px 0;
+    height: 36px;
+    box-sizing: border-box;
+    background: #FFCE0C;
+    border-radius: 4px;
+    border: none;
+    outline: none;
+    font-weight: bold;
+    font-size: 12px;
+    line-height: 16px;
+
+    &:hover {
+      background-color: #FFD73B;
+    }
+
+    &:focus {
+      background-color: #FFCE0C;
+      border: 1px solid #FFFBEA;
+      box-shadow: 0px 1px 10px #FFD73B;
+    }
+
+    &:disabled {
+      background: #FFCE0C;
+      opacity: 0.5;
+    }
+  }
+}
+
+.passwordWrapper {
+  position: relative;
+
+  & input {
+    width: 100%;
+    padding-right: 30px;
+  }
+
+  & .trigger {
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    background-repeat: no-repeat;
+    background-position: center, center;
+
+    &.showPassword {
+      background-image: url('../../assets/eye_open.png');
+    }
+  
+    &.hidePassword {
+      background-image: url('../../assets/eye_close.png');
+    }
+  }
+}
