@@ -1,0 +1,40 @@
+.main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  min-height: 100vh;
+  background: linear-gradient(229.68deg, #6879BB 7.06%, #9300BB 95.23%);
+  font-size: 14px;
+  }
+
+.logo {
+  margin: 32px;
+}
+
+.inner {
+  flex-grow: 1;
+  min-width: 424px;
+  background-color: white;
+}
+
+.form {
+  padding: 36px 48px;
+}
+
+.link {
+  text-decoration: none;
+  color: #3167BA;
+}
+
+.errors {
+  display: flex;
+  align-items: center;
+  padding: 24px;
+  background: #FFE9DB;
+  color: #333;
+
+  & .img {
+    padding: 0 24px;
+  }
+}
