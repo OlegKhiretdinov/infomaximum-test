@@ -1,6 +1,6 @@
 const url = 'http://localhost:4000/api';
 
-export function sendLoginData(email, password, loginError, setToken) {
+export const  sendLoginData = (email, password, loginError, setToken) => {
 
   const request = {
     query: `mutation{
@@ -30,6 +30,35 @@ export function sendLoginData(email, password, loginError, setToken) {
     } else {
       setToken(data.data.login.token);
       loginError([]);
+    }
+  })
+}
+
+export const signUp = (firstName, secondName, email, password, loginError, setToken) => {
+  const request = {
+    query: `mutation{
+      signup(firstName:"${firstName}" secondName:"${secondName}" email:"${email}" password:"${password}")
+    }`
+  }
+
+  return fetch(url, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(request)
+  })
+  .then(response => response.json())
+  .catch(err => ({
+    data: {signup: null},
+    errors:[{message: err.message}]
+  }))
+  .then(data => {
+    if(data.data.signup === null) {
+      loginError(data.errors);
+    } else {
+      setToken(data.data.signup);
+      loginError([])
     }
   })
 }

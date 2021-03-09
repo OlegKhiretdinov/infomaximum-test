@@ -1,5 +1,9 @@
-import Login from '../forms/Login';
 import { connect } from 'react-redux';
+import { Route } from 'react-router';
+import { NavLink } from 'react-router-dom';
+
+import Login from '../forms/Login';
+import SignUp from '../forms/SignUp';
 
 import cls from './LoginPage.module.scss';
 import logo from '../../assets/logo.png';
@@ -27,18 +31,34 @@ const LoginPage = (props) => {
         <img src={logo} alt="logo" />
       </div>
       <div className={cls.inner}>
-        <div className={cls.form}>
-          <Login />
-          <a href="./signup" className={cls.link}>Зарегистрироваться</a>
-        </div>
-        {props.errors.length > 0 && <ErrorsMessage errors={props.errors} />}
+        <Route path='/' exact render={ () => (
+          <>
+            <div className={cls.form}>
+              <Login />
+              <NavLink to="/signup" className={cls.link}>Зарегистрироваться</NavLink>
+            </div>
+            {props.loginErrors.length > 0 && <ErrorsMessage errors={props.loginErrors} />}
+          </>
+        )} />
+        <Route path='/signup' render={ () => (
+          <>
+            <div className={cls.form}>
+              <SignUp />
+              Уже зарегистрированны? 
+              <NavLink to="/" className={cls.link}> Вход</NavLink>
+            </div>
+            {props.signUpErrors.length > 0 && <ErrorsMessage errors={props.signUpErrors} />}
+          </>
+        )} />
       </div>
     </div>
   )
 }
 
 const mapStateToProps = (state) => ({
-  errors: state.login.errors,
+  token: state.login.token,
+  loginErrors: state.login.errors,
+  signUpErrors: state.signUp.errors,
 })
 
 export default connect(mapStateToProps)(LoginPage)
