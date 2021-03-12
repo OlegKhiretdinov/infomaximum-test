@@ -1,4 +1,6 @@
+import { Route } from 'react-router';
 import Menu from '../Menu/Menu';
+import Profile from '../Profile/Profile';
 
 import cls from './Content.module.scss';
 
@@ -8,7 +10,7 @@ const Content = () => {
     <>
       <Menu />
       <div className={cls.content}>
-        <h1>CONTENT</h1>
+        <Route path='/profile' component={Profile} />
       </div>
     </>
   )

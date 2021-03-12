@@ -62,3 +62,49 @@ export const signUp = (firstName, secondName, email, password, loginError, setTo
     }
   })
 }
+
+export const getCurrentUserData = (token, setUserData) => {
+  const request = {
+    query: `{currentUser {
+      id
+      firstName,
+      secondName,
+      email
+    }}`
+  }
+
+  return fetch(url, {
+    method: 'POST',
+    headers: {
+      "authorization": `bearer ${token}`,
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(request)
+  })
+  .then(response => response.json())
+  .then(data => setUserData(data.data.currentUser))
+}
+
+
+export const editCurrentUser = (token, id, email, firstName, secondName, password) => {
+  const request = {
+    query: `mutation{
+      editUser(id: ${id} email:"${email}" firstName:"${firstName}" secondName:"${secondName}" password:"${password}"){
+        id
+        firstName,
+        secondName,
+        email
+      }
+    }`
+  }
+
+  return fetch(url, {
+    method: 'POST',
+    headers: {
+      "authorization": `bearer ${token}`,
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(request)
+  })
+  .then(response => response.json())
+}
