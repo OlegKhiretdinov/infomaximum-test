@@ -1,5 +1,7 @@
-import { Route } from 'react-router';
+import { Route, Switch } from 'react-router';
+
 import Menu from '../Menu/Menu';
+import ProcessList from '../ProcessList/ProcessList';
 import Profile from '../Profile/Profile';
 
 import cls from './Content.module.scss';
@@ -10,7 +12,10 @@ const Content = () => {
     <>
       <Menu />
       <div className={cls.content}>
-        <Route path='/profile' component={Profile} />
+        <Switch>
+          <Route path='/profile' component={Profile} />
+          <Route path='/' component={ProcessList} />
+        </Switch>
       </div>
     </>
   )

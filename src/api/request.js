@@ -107,4 +107,35 @@ export const editCurrentUser = (token, id, email, firstName, secondName, passwor
     body: JSON.stringify(request)
   })
   .then(response => response.json())
+  .then(data => console.log(data))
+}
+
+export const getProcessList = (token, setProcessLis) => {
+  const request = {
+    query: `{
+      processList{
+        id
+        name
+        numberOfExecutions
+        averageLeadTime
+        averageActiveTime
+        employeesInvolvedProcess
+        numberOfScenarios
+        start
+        end
+        loading
+      }
+    }`
+  }
+  return fetch(url, {
+    method: 'POST',
+    headers: {
+      "authorization": `bearer ${token}`,
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(request)
+  })
+  .then(response => response.json())
+  // .then(data => console.log(data.data.processList))
+  .then(data => setProcessLis(data.data.processList))
 }
