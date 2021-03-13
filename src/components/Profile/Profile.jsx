@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 
 import { editCurrentUser, getCurrentUserData } from '../../api/request';
 import { setUserData, toggleShowConfirmPassword, toggleShowPassword } from '../../redux/profile-reducer';
+import { validEmail } from '../forms/formValidation';
 import cls from './Profile.module.scss';
 
 const TriggerTogglePassword = (props) => {
@@ -35,7 +36,7 @@ class Profile extends React.Component {
             if (!values.secondName) {
               errors.secondName = 'Require';
             }
-            if (!values.email) {
+            if (!validEmail(values.email)) {
               errors.email = 'Require';
             }
             if (!values.password) {

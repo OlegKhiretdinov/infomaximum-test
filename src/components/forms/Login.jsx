@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import cls from './forms.module.scss';
 import { loginError, setToken, ToggleShowPassword } from "../../redux/login-reducer"
 import { sendLoginData } from "../../api/request";
-import { validEmail, required } from "./formValidation";
+import { validEmail } from "./formValidation";
 
 const Login = (props) =>  {
 
@@ -16,10 +16,21 @@ const Login = (props) =>  {
   return (
     <Form
       onSubmit={({email, password}) => sendLoginData(email, password, props.loginError, props.setToken)}
+
+      validate={(values) => {
+        const errors = {}
+        if (!validEmail(values.email)) {
+          errors.email = 'Require';
+        }
+        if (!values.password) {
+          errors.password = 'Require';
+        }
+        return errors;
+      }}
       render={({handleSubmit, invalid, modifiedSinceLastSubmit}) => (
         <form onSubmit={handleSubmit} className={cls.login} >
 
-          <Field name="email" validate={validEmail} >
+          <Field name="email" >
             {({ input, meta}) => 
             {
               return(
@@ -32,7 +43,7 @@ const Login = (props) =>  {
             )}}
           </Field>
 
-          <Field name="password" validate={required} type={props.showPassword ? "text" : "password"}>
+          <Field name="password" type={props.showPassword ? "text" : "password"}>
             {({input, meta}) => (
               <div className={cls.passwordWrapper}>
                 <TriggerTogglePassword />

@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import { signUp } from "../../api/request";
 import { setToken } from "../../redux/login-reducer";
 import { signUpError, toggleShowConfirmPassword, toggleShowPassword } from "../../redux/signUp-reducer";
+import { validEmail } from "./formValidation";
 
 import cls from './forms.module.scss';
 
@@ -27,7 +28,7 @@ const SignUp = (props) => {
         if (!values.secondName) {
           errors.secondName = 'Require';
         }
-        if (!values.email) {
+        if (!validEmail(values.email)) {
           errors.email = 'Require';
         }
         if (!values.password) {
