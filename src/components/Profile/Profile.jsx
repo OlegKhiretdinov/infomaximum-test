@@ -86,10 +86,11 @@ class Profile extends React.Component {
                   <Field name="password" type={this.props.showPassword ? "text" : "password"} >
                     {({ input, meta }) => {
                       const errCls = meta.touched && meta.error ? `${cls.input} ${cls.error}` : `${cls.input}`
-                      return (<div className={cls.passwordWrapper}>
-                        <TriggerTogglePassword showPassword={this.props.showPassword} toggle={this.props.toggleShowPassword} />
-                        <input {...input} placeholder="Не задано" className={errCls} />
-                      </div>)
+                      return (
+                        <div className={`${errCls} ${cls.passwordWrapper}`}>
+                          <input {...input} placeholder="Не задано" />
+                          <TriggerTogglePassword showPassword={this.props.showPassword} toggle={this.props.toggleShowPassword} />
+                        </div>)
                     }}
                   </Field>
 
@@ -98,9 +99,9 @@ class Profile extends React.Component {
                     {({ input, meta }) => {
                       const errCls = meta.touched && meta.error ? `${cls.input} ${cls.error}` : `${cls.input}`
                       return (
-                        <div className={cls.passwordWrapper}>
+                        <div className={`${errCls} ${cls.passwordWrapper}`}>
+                          <input {...input} placeholder="Не задано" />
                           <TriggerTogglePassword showPassword={this.props.showConfirmPassword} toggle={this.props.toggleShowConfirmPassword} />
-                          <input {...input} placeholder="Не задано" className={errCls} />
                         </div>)
                     }}
                   </Field>
