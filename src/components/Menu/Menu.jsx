@@ -1,8 +1,13 @@
 import { connect } from 'react-redux';
+import { NavLink } from 'react-router-dom';
+
 import { toggleMenu } from '../../redux/menu-reducer';
+
 import cls from './Menu.module.scss';
 import product from '../../assets/product.png';
-import { NavLink } from 'react-router-dom';
+import user from '../../assets/user.png';
+import processList from '../../assets/process_list.png';
+
 
 const Menu = (props) => {
   return (
@@ -23,8 +28,14 @@ const Menu = (props) => {
             <img src={product} alt="proceset" />
           </div>
         </div>
-        <NavLink exact activeClassName={cls.active} to="/profile" className={cls.menuLink}>UserName</NavLink>
-        <NavLink exact activeClassName={cls.active} to="/" className={cls.menuLink}>Список процессов</NavLink>
+          <NavLink exact activeClassName={cls.active} to="/profile" className={cls.menuLink} onClick={props.toggleMenu}>
+            <img src={user} alt="user"/>
+            <span>UserName</span>
+          </NavLink>
+          <NavLink exact activeClassName={cls.active} to="/" className={cls.menuLink} onClick={props.toggleMenu}>
+            <img src={processList} alt="process list"/>
+            <span>Список процессов</span>
+          </NavLink>
       </div>
     </>
   )
