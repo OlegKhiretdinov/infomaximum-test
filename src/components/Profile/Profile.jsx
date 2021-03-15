@@ -2,6 +2,7 @@ import React from 'react'
 import { Field, Form } from 'react-final-form';
 import { connect } from 'react-redux';
 
+import ErrorsMessage from '../ErrorsMessage/ErrorsMessage';
 import { editCurrentUser } from '../../api/request';
 import { editProfileError, profileIsChange, setUserData, toggleShowConfirmPassword, toggleShowPassword } from '../../redux/profile-reducer';
 import { validEmail } from '../forms/formValidation';
@@ -113,7 +114,7 @@ const Profile = (props) => {
           )}
         </Form>
         <div>
-          {props.profile.errors.length > 0 && <h1>{props.profile.errors[0].message}</h1>}
+          {props.profile.errors.length > 0 && <ErrorsMessage errors={props.profile.errors} />}
         </div>
       </>
     )

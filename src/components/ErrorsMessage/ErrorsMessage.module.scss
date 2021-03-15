@@ -1,0 +1,11 @@
+.errors {
+  display: flex;
+  align-items: center;
+  padding: 24px;
+  background: #FFE9DB;
+  color: #333;
+
+  & .img {
+    padding: 0 24px;
+  }
+}
