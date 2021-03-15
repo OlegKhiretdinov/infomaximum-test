@@ -25,7 +25,7 @@ export const  sendLoginData = (email, password, loginError, setToken) => {
     }
   })
   .then(data => {
-    if (data.data.login === null) {
+    if (data.errors) {
       loginError(data.errors);
     } else {
       setToken(data.data.login.token);
@@ -86,10 +86,15 @@ export const getCurrentUserData = (token, setUserData) => {
 }
 
 
-export const editCurrentUser = (token, id, email, firstName, secondName, password) => {
+export const editCurrentUser = (token, id, fields) => {
+  const changeFields = Object.entries(fields)
+    .filter(item => item[1])
+    .map(item => `${item[0]}:"${item[1]}"`)
+    .join(' ')
+
   const request = {
     query: `mutation{
-      editUser(id: ${id} email:"${email}" firstName:"${firstName}" secondName:"${secondName}" password:"${password}"){
+      editUser(id: ${id} ${changeFields}){
         id
         firstName,
         secondName,
@@ -105,9 +110,8 @@ export const editCurrentUser = (token, id, email, firstName, secondName, passwor
       "Content-Type": "application/json"
     },
     body: JSON.stringify(request)
-  })
-  .then(response => response.json())
-  .then(data => console.log(data))
+  }).then(response => response.json())
+  .catch(err => ({errors: [{message: err.message}]}))
 }
 
 export const getProcessList = (token, setProcessLis) => {
@@ -136,6 +140,5 @@ export const getProcessList = (token, setProcessLis) => {
     body: JSON.stringify(request)
   })
   .then(response => response.json())
-  // .then(data => console.log(data.data.processList))
   .then(data => setProcessLis(data.data.processList))
 }
