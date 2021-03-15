@@ -5,17 +5,18 @@ import cls from './forms.module.scss';
 import { loginError, setToken, ToggleShowPassword } from "../../redux/login-reducer"
 import { sendLoginData } from "../../api/request";
 import { validEmail } from "./formValidation";
+import TriggerTogglePassword from "../TriggerTogglePassword/TriggerTogglePassword";
 
-const Login = (props) =>  {
+const Login = (props) => {
 
-  const TriggerTogglePassword = () => {
-    const triggerClass = props.showPassword ? cls.showPassword : cls.hidePassword
-    return <div className={`${cls.trigger} ${triggerClass}`} onClick={props.ToggleShowPassword}></div>
-  }
+  // const TriggerTogglePassword = () => {
+  //   const triggerClass = props.showPassword ? cls.showPassword : cls.hidePassword
+  //   return <div className={`${cls.trigger} ${triggerClass}`} onClick={props.ToggleShowPassword}></div>
+  // }
 
-  const onSubmit = async ({email, password}) => {
+  const onSubmit = async ({ email, password }) => {
     const response = await sendLoginData(email, password)
-    if(response.errors) {
+    if (response.errors) {
       props.loginError(response.errors)
     } else {
       props.setToken(response.data.login.token);
@@ -36,33 +37,36 @@ const Login = (props) =>  {
         }
         return errors;
       }}
-      render={({handleSubmit, invalid, modifiedSinceLastSubmit}) => (
+      render={({ handleSubmit, invalid, modifiedSinceLastSubmit }) => (
         <form onSubmit={handleSubmit} className={cls.login} >
 
           <Field name="email" >
-            {({ input, meta}) => 
-            {
-              return(
-              <input
-                {...input}
-                type="email"
-                placeholder="Электронная почта"
-                className={meta.touched && meta.error ? cls.error : null}
-              />
-            )}}
+            {({ input, meta }) => {
+              const inputCls = meta.touched && meta.error ? `${cls.input} ${cls.error}` : `${cls.input}`
+              return (
+                <input
+                  {...input}
+                  type="email"
+                  placeholder="Электронная почта"
+                  className={inputCls}
+                />
+              )
+            }}
           </Field>
 
           <Field name="password" type={props.showPassword ? "text" : "password"}>
-            {({input, meta}) => (
-              <div className={cls.passwordWrapper}>
-                <TriggerTogglePassword />
-                <input
-                  {...input}
-                  placeholder="Пароль"
-                  className={meta.touched && meta.error ? cls.error : null}
-                />
-              </div>
-            )}
+            {({ input, meta }) => {
+              const inputCls = meta.touched && meta.error ? `${cls.input} ${cls.error}` : `${cls.input}`
+              return (
+                <div className={`${inputCls} ${cls.passwordWrapper}`}>
+                  <input
+                    {...input}
+                    placeholder="Пароль"
+                  />
+                  <TriggerTogglePassword toggle={props.ToggleShowPassword} show={props.showPassword} />
+                </div>
+              )
+            }}
           </Field>
 
           <button type="submit" disabled={invalid || (props.errors.length > 0 && !modifiedSinceLastSubmit)}>Войти в систему</button>

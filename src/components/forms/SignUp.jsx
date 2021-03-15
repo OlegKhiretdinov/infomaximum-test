@@ -1,5 +1,6 @@
 import { Field, Form } from "react-final-form";
 import { connect } from "react-redux";
+import TriggerTogglePassword from "../TriggerTogglePassword/TriggerTogglePassword";
 import { signUp } from "../../api/request";
 import { setToken } from "../../redux/login-reducer";
 import { signUpError, toggleShowConfirmPassword, toggleShowPassword } from "../../redux/signUp-reducer";
@@ -9,10 +10,10 @@ import cls from './forms.module.scss';
 
 const SignUp = (props) => {
 
-  const TriggerTogglePassword = (props) => {
-    const triggerClass = props.showPassword ? cls.showPassword : cls.hidePassword
-    return <div className={`${cls.trigger} ${triggerClass}`} onClick={props.toggle}></div>
-  }
+  // const TriggerTogglePassword = (props) => {
+  //   const triggerClass = props.showPassword ? cls.showPassword : cls.hidePassword
+  //   return <div className={`${cls.trigger} ${triggerClass}`} onClick={props.toggle}></div>
+  // }
 
   const onSubmit = async ({firstName, secondName, email, password}) => {
     const response = await signUp(firstName, secondName, email, password)
@@ -52,39 +53,54 @@ const SignUp = (props) => {
         <form onSubmit={handleSubmit} className={cls.login}>
 
           <Field name="firstName" type="text"  >
-            {({ input, meta}) => (
-              <input {...input} placeholder="Имя" className={meta.touched && meta.error ? cls.error : null} />
-            )}
+            {({ input, meta}) => {
+              const inputCls = meta.touched && meta.error ? `${cls.input} ${cls.error}` : `${cls.input}`
+              return (
+              <input {...input} placeholder="Имя" className={inputCls} />
+              )}
+            }
           </Field>
 
           <Field name="secondName" type="text" >
-            {({ input, meta}) => (
-              <input{...input} placeholder="Фамилия" className={meta.touched && meta.error ? cls.error : null} />
+            {({ input, meta}) => {
+              const inputCls = meta.touched && meta.error ? `${cls.input} ${cls.error}` : `${cls.input}`
+              return (
+              <input{...input} placeholder="Фамилия" className={inputCls} />
             )}
+            }
           </Field>
 
           <Field name="email" type="email" >
-            {({ input, meta}) =>(
-              <input {...input} placeholder="Электронная почта" className={meta.touched && meta.error ? cls.error : null} />
-            )}
+            {({ input, meta}) =>{
+              const inputCls = meta.touched && meta.error ? `${cls.input} ${cls.error}` : `${cls.input}`
+              return (
+              <input {...input} placeholder="Электронная почта" className={inputCls} />
+              )}
+            }
           </Field>
 
           <Field name="password" type={props.showPassword ? "text" : "password"} >
-            {({ input, meta }) => (
-              <div className={cls.passwordWrapper}>
-                <TriggerTogglePassword showPassword={props.showPassword} toggle={props.toggleShowPassword} />
+            {({ input, meta }) => {
+              const inputCls = meta.touched && meta.error ? `${cls.input} ${cls.error}` : `${cls.input}`
+              return (
+              <div className={`${cls.passwordWrapper} ${inputCls}`}>
                 <input {...input} placeholder="Пароль" className={meta.touched && meta.error ? cls.error : null} />
+                <TriggerTogglePassword toggle={props.toggleShowPassword} show={props.showPassword} />
               </div>
             )}
+            }
           </Field>
 
           <Field name="confirmPassword" type={props.showConfirmPassword ? "text" : "password"} >
-            {({ input, meta }) => (
-              <div className={cls.passwordWrapper}>
-                <TriggerTogglePassword showPassword={props.showConfirmPassword} toggle={props.toggleShowConfirmPassword} />
+            {({ input, meta }) => {
+              const inputCls = meta.touched && meta.error ? `${cls.input} ${cls.error}` : `${cls.input}`
+              return (
+              <div className={`${cls.passwordWrapper} ${inputCls}`}>
                 <input {...input} placeholder="Подтвердите пароль" className={meta.touched && meta.error ? cls.error : null} />
+                <TriggerTogglePassword toggle={props.toggleShowConfirmPassword} show={props.showConfirmPassword} />
               </div>
             )}
+            }
           </Field>
 
           <button type="submit" disabled={invalid || (props.errors.length > 0 && !modifiedSinceLastSubmit)}>Применить и войти</button>
