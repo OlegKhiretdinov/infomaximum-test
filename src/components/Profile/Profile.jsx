@@ -14,10 +14,6 @@ const TriggerTogglePassword = (props) => {
 
 class Profile extends React.Component {
 
-  componentDidMount = () => {
-    getCurrentUserData(this.props.token, this.props.setCurrentUserData)
-  }
-
   onSubmit = async ({ email, firstName, secondName, password }) => {
     await editCurrentUser(this.props.token, this.props.profile.id, email, firstName, secondName, password)
     getCurrentUserData(this.props.token, this.props.setCurrentUserData)
@@ -59,7 +55,7 @@ class Profile extends React.Component {
               <div className={cls.fieldsWrapper}>
                 <div className={cls.fields}>
                   <label className={cls.label}>Имя</label>
-                  <Field name="firstName" type="text" defaultValue={this.props.profile.firstName} >
+                  <Field name="firstName" type="text" initialValue={this.props.profile.firstName} >
                     {({ input, meta }) => {
                       const errCls = meta.touched && meta.error ? `${cls.input} ${cls.error}` : `${cls.input}`
                       return <input {...input} placeholder="Не задано" className={errCls} />

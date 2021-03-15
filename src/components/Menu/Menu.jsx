@@ -30,7 +30,7 @@ const Menu = (props) => {
         </div>
           <NavLink exact activeClassName={cls.active} to="/profile" className={cls.menuLink} onClick={props.toggleMenu}>
             <img src={user} alt="user"/>
-            <span>UserName</span>
+            <span>{props.userName}</span>
           </NavLink>
           <NavLink exact activeClassName={cls.active} to="/" className={cls.menuLink} onClick={props.toggleMenu}>
             <img src={processList} alt="process list"/>
@@ -43,6 +43,7 @@ const Menu = (props) => {
 
 const mapStateToProps = (state) => ({
   menuIsOpen: state.menu.menuIsOpen,
+  userName: state.profile.firstName,
 })
 
 const mapDispatchToProps = (dispatch) => ({
