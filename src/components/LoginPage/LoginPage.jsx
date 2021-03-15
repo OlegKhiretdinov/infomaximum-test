@@ -8,6 +8,8 @@ import ErrorsMessage from '../ErrorsMessage/ErrorsMessage';
 
 import cls from './LoginPage.module.scss';
 import logo from '../../assets/logo.png';
+import { signUpError } from '../../redux/signUp-reducer';
+import { loginError } from '../../redux/login-reducer';
 
 
 const LoginPage = (props) => {
@@ -24,7 +26,7 @@ const LoginPage = (props) => {
               <div className={cls.form}>
                 <SignUp />
               Уже зарегистрированны?
-              <NavLink to="/" className={cls.link}> Вход</NavLink>
+              <NavLink to="/" className={cls.link} onClick={() => props.loginError([])}> Вход</NavLink>
               </div>
               {props.signUpErrors.length > 0 && <ErrorsMessage errors={props.signUpErrors} />}
             </>
@@ -34,7 +36,7 @@ const LoginPage = (props) => {
             <>
               <div className={cls.form}>
                 <Login />
-                <NavLink to="/signup" className={cls.link}>Зарегистрироваться</NavLink>
+                <NavLink to="/signup" className={cls.link} onClick={() => props.signUpError([])}>Зарегистрироваться</NavLink>
               </div>
               {props.loginErrors.length > 0 && <ErrorsMessage errors={props.loginErrors} />}
             </>
@@ -52,4 +54,15 @@ const mapStateToProps = (state) => ({
   signUpErrors: state.signUp.errors,
 })
 
-export default connect(mapStateToProps)(LoginPage)
+const mapDispatchToProps = (dispatch) => {
+  return {
+    signUpError: (errors) => {
+      dispatch(signUpError(errors))
+    },
+    loginError: (errors) => {
+      dispatch(loginError(errors))
+    },
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(LoginPage)
