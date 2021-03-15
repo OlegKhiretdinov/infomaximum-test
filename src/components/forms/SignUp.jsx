@@ -14,12 +14,19 @@ const SignUp = (props) => {
     return <div className={`${cls.trigger} ${triggerClass}`} onClick={props.toggle}></div>
   }
 
+  const onSubmit = async ({firstName, secondName, email, password}) => {
+    const response = await signUp(firstName, secondName, email, password)
+    if(response.errors) {
+      props.signUpError(response.errors)
+    } else {
+      props.setToken(response.data.signup);
+      props.signUpError([]);
+    }
+  }
+
   return (
     <Form
-      onSubmit={({firstName, secondName, email, password}) => {
-        signUp(firstName, secondName, email, password, props.signUpError, props.setToken)
-      }}
-
+      onSubmit={(props) => onSubmit(props)}
       validate={(values) => {
         const errors = {};
         if (!values.firstName) {

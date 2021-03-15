@@ -45,6 +45,8 @@ const Profile = (props) => {
             firstName:props.profile.firstName,
             secondName:props.profile.secondName,
             email:props.profile.email,
+            password: '',
+            confirmPassword: '',
           }}
         >
           {({ handleSubmit, invalid, pristine,modifiedSinceLastSubmit }) => (
@@ -52,7 +54,7 @@ const Profile = (props) => {
 
               <div className={cls.header}>
                 <h1 className={cls.title}>{`${props.profile.firstName} ${props.profile.secondName}. Редактирование`}</h1>
-                <button type="submit" disabled={invalid || pristine || !modifiedSinceLastSubmit} >{props.profile.isChanged ? 'Сохранено' : 'Сохранить'}</button>
+                <button type="submit" disabled={invalid || pristine } >{props.profile.isChanged ? 'Сохранено' : 'Сохранить'}</button>
               </div>
 
               <div className={cls.fieldsWrapper}>

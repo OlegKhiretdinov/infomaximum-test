@@ -13,10 +13,19 @@ const Login = (props) =>  {
     return <div className={`${cls.trigger} ${triggerClass}`} onClick={props.ToggleShowPassword}></div>
   }
 
+  const onSubmit = async ({email, password}) => {
+    const response = await sendLoginData(email, password)
+    if(response.errors) {
+      props.loginError(response.errors)
+    } else {
+      props.setToken(response.data.login.token);
+      props.loginError([]);
+    }
+  }
+
   return (
     <Form
-      onSubmit={({email, password}) => sendLoginData(email, password, props.loginError, props.setToken)}
-
+      onSubmit={(props) => onSubmit(props)}
       validate={(values) => {
         const errors = {}
         if (!validEmail(values.email)) {

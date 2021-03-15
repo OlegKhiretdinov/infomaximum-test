@@ -1,6 +1,6 @@
 const url = 'http://localhost:4000/api';
 
-export const  sendLoginData = (email, password, loginError, setToken) => {
+export const  sendLoginData = (email, password) => {
 
   const request = {
     query: `mutation{
@@ -18,23 +18,10 @@ export const  sendLoginData = (email, password, loginError, setToken) => {
     body: JSON.stringify(request)
   })
   .then(response => response.json())
-  .catch(err => {
-    return{
-      data: {login: null},
-      errors:[{message: err.message,}]
-    }
-  })
-  .then(data => {
-    if (data.errors) {
-      loginError(data.errors);
-    } else {
-      setToken(data.data.login.token);
-      loginError([]);
-    }
-  })
+  .catch(err => ({errors:[{message: err.message,}]}))
 }
 
-export const signUp = (firstName, secondName, email, password, loginError, setToken) => {
+export const signUp = (firstName, secondName, email, password) => {
   const request = {
     query: `mutation{
       signup(firstName:"${firstName}" secondName:"${secondName}" email:"${email}" password:"${password}")
@@ -49,21 +36,10 @@ export const signUp = (firstName, secondName, email, password, loginError, setTo
     body: JSON.stringify(request)
   })
   .then(response => response.json())
-  .catch(err => ({
-    data: {signup: null},
-    errors:[{message: err.message}]
-  }))
-  .then(data => {
-    if(data.data.signup === null) {
-      loginError(data.errors);
-    } else {
-      setToken(data.data.signup);
-      loginError([])
-    }
-  })
+  .catch(err => ({errors:[{message: err.message,}]}))
 }
 
-export const getCurrentUserData = (token, setUserData) => {
+export const getCurrentUserData = (token) => {
   const request = {
     query: `{currentUser {
       id
@@ -82,7 +58,6 @@ export const getCurrentUserData = (token, setUserData) => {
     body: JSON.stringify(request)
   })
   .then(response => response.json())
-  .then(data => setUserData(data.data.currentUser))
 }
 
 
@@ -114,7 +89,7 @@ export const editCurrentUser = (token, id, fields) => {
   .catch(err => ({errors: [{message: err.message}]}))
 }
 
-export const getProcessList = (token, setProcessLis) => {
+export const getProcessList = (token) => {
   const request = {
     query: `{
       processList{
@@ -140,5 +115,4 @@ export const getProcessList = (token, setProcessLis) => {
     body: JSON.stringify(request)
   })
   .then(response => response.json())
-  .then(data => setProcessLis(data.data.processList))
 }

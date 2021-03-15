@@ -9,6 +9,7 @@ class ProcessList extends React.Component {
 
   componentDidMount() {
     getProcessList(this.props.token, this.props.setProcessList)
+    .then(data => this.props.setProcessList(data.data.processList))
   }
 
   render() {

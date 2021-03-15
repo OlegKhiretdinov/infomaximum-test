@@ -11,7 +11,8 @@ import cls from './Content.module.scss';
 class Content extends React.Component {
 
   componentDidMount() {
-    getCurrentUserData(this.props.token, this.props.setCurrentUserData)
+    getCurrentUserData(this.props.token)
+    .then(data => this.props.setCurrentUserData(data.data.currentUser))
   }
 
   render() {
@@ -20,7 +21,6 @@ class Content extends React.Component {
         <Menu />
         <div className={cls.content}>
           <Switch>
-            {/* <Route path='/profile' component={Profile} /> */}
             <Route path='/profile' render = {() => {return (this.props.profile ? <Profile profile={this.props.profile}/> : null)}} />
             <Route path='/' component={ProcessList} />
           </Switch>
