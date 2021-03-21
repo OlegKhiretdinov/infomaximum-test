@@ -1,3 +1,5 @@
+import { getProcessList } from "../api/request";
+
 const SET_PROCESS_LIST = 'SET_PROCESS_LIST';
 
 const initialState = {
@@ -13,9 +15,14 @@ const processReducer = (state = initialState, action) => {
   }
 }
 
-export const setProcessList = (processList) => ({
+const setProcessListData = (processList) => ({
   type: SET_PROCESS_LIST,
   processList,
 })
+
+export const setProcessList = () => async (dispatch, getState) => {
+  const response = await getProcessList(getState().login.token)
+  dispatch(setProcessListData(response.data.processList))
+}
 
 export default processReducer

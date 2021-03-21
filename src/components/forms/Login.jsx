@@ -3,28 +3,17 @@ import { connect } from "react-redux";
 import { useState } from "react";
 
 import cls from './forms.module.scss';
-import { loginError, setToken } from "../../redux/login-reducer"
-import { sendLoginData } from "../../api/request";
+import { login } from "../../redux/login-reducer"
 import { validEmail } from "./formValidation";
 import TriggerTogglePassword from "../TriggerTogglePassword/TriggerTogglePassword";
 
 const Login = (props) => {
-
+  
   const [isShowPassword, toggleShowPassword] = useState(false)
-
-  const onSubmit = async ({ email, password }) => {
-    const response = await sendLoginData(email, password)
-    if (response.errors) {
-      props.loginError(response.errors)
-    } else {
-      props.setToken(response.data.login.token);
-      props.loginError([]);
-    }
-  }
 
   return (
     <Form
-      onSubmit={(props) => onSubmit(props)}
+      onSubmit={({email, password}) => props.login(email, password)}
       validate={(values) => {
         const errors = {}
         if (!validEmail(values.email)) {
@@ -76,19 +65,15 @@ const Login = (props) => {
 
 const mapStateToProps = (state) => {
   return {
-    token: state.login.token,
     errors: state.login.errors,
   }
 }
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    setToken: (token) => {
-      dispatch(setToken(token))
-    },
-    loginError: (errors) => {
-      dispatch(loginError(errors))
-    },
+    login: (email, password) => {
+      dispatch(login(email, password))
+    }
   }
 }
 

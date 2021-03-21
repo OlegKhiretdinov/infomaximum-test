@@ -1,4 +1,5 @@
-import { combineReducers, createStore } from "redux";
+import { applyMiddleware, combineReducers, createStore } from "redux";
+import thunk from "redux-thunk";
 import loginReducer from "./login-reducer";
 import processReducer from "./process-reducer";
 import profileReducer from "./profile-reducer";
@@ -11,6 +12,6 @@ const reducers = combineReducers({
   processList: processReducer,
 })
 
-const store = createStore(reducers)
+const store = createStore(reducers, applyMiddleware(thunk))
 
 export default store;

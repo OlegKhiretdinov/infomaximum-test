@@ -1,3 +1,5 @@
+import { sendLoginData } from "../api/request";
+
 const SET_TOKEN = 'SET_TOKEN';
 const LOGIN_ERRORS = 'LOGIN_ERRORS';
 
@@ -26,5 +28,15 @@ export const loginError = (errors) => ({
   type: LOGIN_ERRORS,
   errors
 })
+
+export const login = (email, password) => async (dispatch) => {
+  const response = await sendLoginData(email, password)
+  if (response.errors) {
+    dispatch(loginError(response.errors))
+  } else {
+    dispatch(setToken(response.data.login.token));
+    dispatch(loginError([]));
+  }
+}
 
 export default loginReducer

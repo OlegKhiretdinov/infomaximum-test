@@ -2,9 +2,7 @@ import { Field, Form } from "react-final-form";
 import { connect } from "react-redux";
 import { useState } from "react";
 import TriggerTogglePassword from "../TriggerTogglePassword/TriggerTogglePassword";
-import { signUp } from "../../api/request";
-import { setToken } from "../../redux/login-reducer";
-import { signUpError } from "../../redux/signUp-reducer";
+import { signUp } from "../../redux/signUp-reducer";
 import { validEmail } from "./formValidation";
 
 import cls from './forms.module.scss';
@@ -14,19 +12,9 @@ const SignUp = (props) => {
   const [isShowPassword, toggleShowPassword] = useState(false)
   const [isShowConfirm, toggleShowConfirm] = useState(false)
 
-  const onSubmit = async ({firstName, secondName, email, password}) => {
-    const response = await signUp(firstName, secondName, email, password)
-    if(response.errors) {
-      props.signUpError(response.errors)
-    } else {
-      props.setToken(response.data.signup);
-      props.signUpError([]);
-    }
-  }
-
   return (
     <Form
-      onSubmit={(props) => onSubmit(props)}
+      onSubmit={(signUpData) => props.signUp(signUpData)}
       validate={(values) => {
         const errors = {};
         if (!values.firstName) {
@@ -117,12 +105,9 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    setToken: (token) => {
-      dispatch(setToken(token))
-    },
-    signUpError: (errors) => {
-      dispatch(signUpError(errors))
-    },
+    signUp: (signUpData) => {
+      dispatch(signUp(signUpData))
+    }
   }
 }
 
