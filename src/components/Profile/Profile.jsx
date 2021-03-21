@@ -1,19 +1,18 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Field, Form } from 'react-final-form';
 import { connect } from 'react-redux';
 
 import ErrorsMessage from '../ErrorsMessage/ErrorsMessage';
 import { editCurrentUser } from '../../api/request';
-import { editProfileError, profileIsChange, setUserData, toggleShowConfirmPassword, toggleShowPassword } from '../../redux/profile-reducer';
+import { editProfileError, profileIsChange, setUserData } from '../../redux/profile-reducer';
 import { validEmail } from '../forms/formValidation';
 import cls from './Profile.module.scss';
-
-const TriggerTogglePassword = (props) => {
-  const triggerClass = props.showPassword ? cls.showPassword : cls.hidePassword
-  return <div className={`${cls.trigger} ${triggerClass}`} onClick={props.toggle}></div>
-}
+import TriggerTogglePassword from '../TriggerTogglePassword/TriggerTogglePassword';
 
 const Profile = (props) => {
+
+  const [isShowPassword, toggleShowPassword] = useState(false)
+  const [isShowConfirm, toggleShowConfirm] = useState(false)
 
   const onSubmit = async (fields) => {
     let { email, firstName, secondName, password } = {...props.profile, ...fields}
@@ -84,25 +83,25 @@ const Profile = (props) => {
                   
 
                   <label className={cls.label}>Новый пароль</label>
-                  <Field name="password" type={props.showPassword ? "text" : "password"} >
+                  <Field name="password" type={isShowPassword ? "text" : "password"} >
                     {({ input, meta }) => {
                       const errCls = meta.touched && meta.error ? `${cls.input} ${cls.error}` : `${cls.input}`
                       return (
                         <div className={`${errCls} ${cls.passwordWrapper}`}>
                           <input {...input} placeholder="Не задано" />
-                          <TriggerTogglePassword showPassword={props.showPassword} toggle={props.toggleShowPassword} />
+                          <TriggerTogglePassword show={isShowPassword} toggle={() => toggleShowPassword(!isShowPassword)} />
                         </div>)
                     }}
                   </Field>
 
                   <label className={cls.label}>Подтвердите пароль</label>
-                  <Field name="confirmPassword" type={props.showConfirmPassword ? "text" : "password"} >
+                  <Field name="confirmPassword" type={isShowConfirm ? "text" : "password"} >
                     {({ input, meta }) => {
                       const errCls = meta.touched && meta.error ? `${cls.input} ${cls.error}` : `${cls.input}`
                       return (
                         <div className={`${errCls} ${cls.passwordWrapper}`}>
                           <input {...input} placeholder="Не задано" />
-                          <TriggerTogglePassword showPassword={props.showConfirmPassword} toggle={props.toggleShowConfirmPassword} />
+                          <TriggerTogglePassword show={isShowConfirm} toggle={() => toggleShowConfirm(!isShowConfirm)} />
                         </div>)
                     }}
                   </Field>
@@ -122,20 +121,12 @@ const Profile = (props) => {
 const mapStateToProps = (state) => ({
   token: state.login.token,
   profile: state.profile,
-  showPassword: state.profile.showPassword,
-  showConfirmPassword: state.profile.showConfirmPassword,
 })
 
 const mapDispatchToProps = (dispatch) => {
   return {
     setCurrentUserData: (userData) => {
       dispatch(setUserData(userData))
-    },
-    toggleShowPassword: () => {
-      dispatch(toggleShowPassword())
-    },
-    toggleShowConfirmPassword: () => {
-      dispatch(toggleShowConfirmPassword())
     },
     editProfileError: (errors) => {
       dispatch(editProfileError(errors))

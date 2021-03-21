@@ -1,18 +1,16 @@
 import { Field, Form } from "react-final-form";
 import { connect } from "react-redux";
+import { useState } from "react";
 
 import cls from './forms.module.scss';
-import { loginError, setToken, ToggleShowPassword } from "../../redux/login-reducer"
+import { loginError, setToken } from "../../redux/login-reducer"
 import { sendLoginData } from "../../api/request";
 import { validEmail } from "./formValidation";
 import TriggerTogglePassword from "../TriggerTogglePassword/TriggerTogglePassword";
 
 const Login = (props) => {
 
-  // const TriggerTogglePassword = () => {
-  //   const triggerClass = props.showPassword ? cls.showPassword : cls.hidePassword
-  //   return <div className={`${cls.trigger} ${triggerClass}`} onClick={props.ToggleShowPassword}></div>
-  // }
+  const [isShowPassword, toggleShowPassword] = useState(false)
 
   const onSubmit = async ({ email, password }) => {
     const response = await sendLoginData(email, password)
@@ -54,7 +52,7 @@ const Login = (props) => {
             }}
           </Field>
 
-          <Field name="password" type={props.showPassword ? "text" : "password"}>
+          <Field name="password" type={isShowPassword ? "text" : "password"}>
             {({ input, meta }) => {
               const inputCls = meta.touched && meta.error ? `${cls.input} ${cls.error}` : `${cls.input}`
               return (
@@ -63,7 +61,7 @@ const Login = (props) => {
                     {...input}
                     placeholder="Пароль"
                   />
-                  <TriggerTogglePassword toggle={props.ToggleShowPassword} show={props.showPassword} />
+                  <TriggerTogglePassword toggle={() => toggleShowPassword(!isShowPassword)} show={isShowPassword} />
                 </div>
               )
             }}
@@ -80,7 +78,6 @@ const mapStateToProps = (state) => {
   return {
     token: state.login.token,
     errors: state.login.errors,
-    showPassword: state.login.showPassword,
   }
 }
 
@@ -92,9 +89,6 @@ const mapDispatchToProps = (dispatch) => {
     loginError: (errors) => {
       dispatch(loginError(errors))
     },
-    ToggleShowPassword: () => {
-      dispatch(ToggleShowPassword())
-    }
   }
 }
 
