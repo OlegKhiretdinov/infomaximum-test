@@ -67,7 +67,6 @@ const Profile = (props) => {
                   }}
                 </Field>
 
-
                 <label className={cls.label}>Новый пароль</label>
                 <Field name="password" type={isShowPassword ? "text" : "password"} >
                   {({ input, meta }) => {
@@ -101,7 +100,6 @@ const Profile = (props) => {
       </div>
     </>
   )
-
 }
 
 const mapStateToProps = (state) => ({

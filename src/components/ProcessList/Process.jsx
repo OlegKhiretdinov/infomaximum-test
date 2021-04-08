@@ -12,6 +12,13 @@ import scenarios from '../../assets/scenarios.png';
 moment.locale('ru')
 
 const Process = (props) => {
+  const averageTime = `${moment.duration(Number(props.process.averageLeadTime), "milliseconds").format("h[ч] m[мин]")}`
+  const averageActiveTime = `${moment.duration(Number(props.process.averageActiveTime), "milliseconds").format('H[ч] m[мин]')}`
+  const percent = `(${(props.process.averageActiveTime / props.process.averageLeadTime * 100).toFixed(1)}%)`
+  const start = moment.unix(Number(props.process.start)).format('DD MMMM YYYY')
+  const end = moment.unix(Number(props.process.end)).format('DD MMMM YYYY')
+  const loading = moment.unix(Number(props.process.loading)).format('DD MMMM YYYY')
+
   return (
     <div className={cls.process}>
 
@@ -35,14 +42,14 @@ const Process = (props) => {
           <div className={cls.item}>
             <img src={time} alt="time" />
             <span className={cls.infoData}>
-              {`${moment.duration(Number(props.process.averageLeadTime), "milliseconds").format("h[ч] m[мин]")}`}
+              {averageTime}
             </span>
             <p className={cls.sub}>среднее время выполнения</p>
           </div>
           <div className={cls.item}>
             <img src={active_time} alt="active time" />
             <span className={cls.infoData}>
-              {`${moment.duration(Number(props.process.averageActiveTime), "milliseconds").format('H[ч] m[мин]')} (${(props.process.averageActiveTime / props.process.averageLeadTime * 100).toFixed(1)}%)`}
+              {`${averageActiveTime} ${percent}`}
             </span>
             <p className={cls.sub}>среднее активное время</p>
           </div>
@@ -66,9 +73,9 @@ const Process = (props) => {
         </div>
 
         <div className={cls.date}>
-          <p className={cls.sub}>Начало</p> <p className={cls.data}>{moment.unix(Number(props.process.start)).format('DD MMMM YYYY')}</p>
-          <p className={cls.sub}>Окончание</p> <p className={cls.data}>{moment.unix(Number(props.process.end)).format('DD MMMM YYYY')}</p>
-          <p className={cls.sub}>Загрузка</p> <p className={cls.data}>{moment.unix(Number(props.process.loading)).format('DD MMMM YYYY')}</p>
+          <p className={cls.sub}>Начало</p><p className={cls.data}>{start}</p>
+          <p className={cls.sub}>Окончание</p><p className={cls.data}>{end}</p>
+          <p className={cls.sub}>Загрузка</p><p className={cls.data}>{loading}</p>
         </div>
       </div>
     </div>

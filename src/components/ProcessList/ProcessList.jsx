@@ -1,22 +1,18 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import Process from './Process';
 
 import { connect } from 'react-redux';
 import { setProcessList } from '../../redux/process-reducer';
 
-class ProcessList extends React.Component {
+const ProcessList = (props) => {
 
-  componentDidMount() {
-    this.props.setProcessList()
-  }
+  useEffect(() => props.setProcessList(), [])
 
-  render() {
-    return(
-      <div>
-        {this.props.list.length > 0 && this.props.list.map(process => <Process key={process.id} process={process} />)}
-      </div>
-    )
-  }
+  return (
+    <div>
+      {props.list.map(process => <Process key={process.id} process={process} />)}
+    </div>
+  )
 }
 
 const mapStateToProps = (state) => ({

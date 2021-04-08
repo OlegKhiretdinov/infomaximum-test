@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { Route, Switch } from 'react-router';
 import { setCurrentUserData } from '../../redux/profile-reducer';
@@ -7,30 +7,22 @@ import ProcessList from '../ProcessList/ProcessList';
 import Profile from '../Profile/Profile';
 import cls from './Content.module.scss';
 
-class Content extends React.Component {
+const Content = (props) => {
 
-  componentDidMount() {
-    this.props.setCurrentUserData()
-  }
+  useEffect(() => props.setCurrentUserData(), [])
 
-  render() {
-    return (
-      <>
-        <Menu />
-        <div className={cls.content}>
-          <Switch>
-            <Route path='/profile' render = {() => (this.props.profile ? <Profile profile={this.props.profile}/> : null)} />
-            <Route path='/' component={ProcessList} />
-          </Switch>
-        </div>
-      </>
-    )
-  }
+  return (
+    <>
+      <Menu />
+      <div className={cls.content}>
+        <Switch>
+          <Route path='/profile' component={Profile} />
+          <Route path='/' component={ProcessList} />
+        </Switch>
+      </div>
+    </>
+  )
 }
-
-const mapStateToProps = (state) => ({
-  profile: state.profile,
-})
 
 const mapDispatchToProps = (dispatch) => ({
   setCurrentUserData: () => {
@@ -38,4 +30,4 @@ const mapDispatchToProps = (dispatch) => ({
   },
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(Content);
+export default connect(null, mapDispatchToProps)(Content);
