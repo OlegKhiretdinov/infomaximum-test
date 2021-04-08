@@ -1,4 +1,5 @@
 import { SendSignUpData } from "../api/request";
+import { setAuthToken } from "../utils/localStorage";
 import { setToken } from "./login-reducer";
 
 const SIGN_UP_ERRORS ='SIGN_UP_ERRORS';
@@ -29,6 +30,7 @@ export const signUp = ({firstName, secondName, email, password}) => async (dispa
   } else {
     dispatch(setToken(response.data.signup));
     dispatch(signUpError([]));
+    setAuthToken(response.data.signup)
   }
 }
 

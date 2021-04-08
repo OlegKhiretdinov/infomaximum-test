@@ -1,4 +1,5 @@
 import { sendLoginData } from "../api/request";
+import { setAuthToken } from "../utils/localStorage";
 
 const SET_TOKEN = 'SET_TOKEN';
 const LOGIN_ERRORS = 'LOGIN_ERRORS';
@@ -36,6 +37,7 @@ export const login = (email, password) => async (dispatch) => {
   } else {
     dispatch(setToken(response.data.login.token));
     dispatch(loginError([]));
+    setAuthToken(response.data.login.token)
   }
 }
 
