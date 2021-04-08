@@ -21,7 +21,7 @@ export const  sendLoginData = (email, password) => {
   .catch(err => ({errors:[{message: err.message,}]}))
 }
 
-export const signUp = (firstName, secondName, email, password) => {
+export const SendSignUpData = (firstName, secondName, email, password) => {
   const request = {
     query: `mutation{
       signup(firstName:"${firstName}" secondName:"${secondName}" email:"${email}" password:"${password}")

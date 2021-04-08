@@ -1,21 +1,17 @@
-const TOGGLE_SHOW_PASSWORD_SIGN_UP = 'TOGGLE_SHOW_PASSWORD_SIGN_UP';
-const TOGGLE_SHOW_CONFIRM_SIGN_UP = 'TOGGLE_SHOW_CONFIRM_SIGN_UP';
+import { SendSignUpData } from "../api/request";
+import { setAuthToken } from "../utils/localStorage";
+import { setToken } from "./login-reducer";
+
 const SIGN_UP_ERRORS ='SIGN_UP_ERRORS';
 
 const initialState = {
   errors: [],
-  showPassword: false,
-  showConfirmPassword: false,
 }
 
 const signUpReducer = (state = initialState, action) => {
   switch (action.type) {
     case SIGN_UP_ERRORS:
       return { ...state, errors: action.errors}
-    case TOGGLE_SHOW_PASSWORD_SIGN_UP:
-      return {...state, showPassword: !state.showPassword}
-    case TOGGLE_SHOW_CONFIRM_SIGN_UP:
-      return {...state, showConfirmPassword: !state.showConfirmPassword}
     default:
       return state
   }
@@ -26,13 +22,16 @@ export const signUpError = (errors) => ({
   errors,
 })
 
-export const toggleShowPassword = () => ({
-  type: TOGGLE_SHOW_PASSWORD_SIGN_UP,
-})
+export const signUp = ({firstName, secondName, email, password}) => async (dispatch) => {
 
-export const toggleShowConfirmPassword = () => ({
-  type: TOGGLE_SHOW_CONFIRM_SIGN_UP,
-})
-
+  const response = await SendSignUpData (firstName, secondName, email, password)
+  if(response.errors) {
+    dispatch(signUpError(response.errors));
+  } else {
+    dispatch(setToken(response.data.signup));
+    dispatch(signUpError([]));
+    setAuthToken(response.data.signup)
+  }
+}
 
 export default signUpReducer;

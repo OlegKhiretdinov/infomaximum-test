@@ -1,6 +1,6 @@
+import { editCurrentUser, getCurrentUserData } from "../api/request";
+
 const SET_USER_DATA = 'SET_USER_DATA';
-const TOGGLE_SHOW_PASSWORD_EDIT = 'TOGGLE_SHOW_PASSWORD_EDIT';
-const TOGGLE_SHOW_CONFIRM_EDIT = 'TOGGLE_SHOW_CONFIRM_EDIT';
 const ERROR_EDIT_PROFILE = 'ERROR_EDIT_PROFILE';
 const CHANGE_PROFILE = 'CHANGE_PROFILE'
 
@@ -9,8 +9,6 @@ const initialState = {
   secondName: '',
   email: '',
   id: null,
-  showPassword: false,
-  showConfirmPassword: false,
   errors: [],
   isChanged: false
 }
@@ -18,15 +16,11 @@ const initialState = {
 const profileReducer = (state = initialState, action) => {
   switch (action.type) {
     case SET_USER_DATA:
-      return {...state, ...action.currentUser}
-    case TOGGLE_SHOW_PASSWORD_EDIT:
-      return {...state, showPassword: !state.showPassword}
-    case TOGGLE_SHOW_CONFIRM_EDIT:
-      return {...state, showConfirmPassword: !state.showConfirmPassword}
+      return { ...state, ...action.currentUser }
     case ERROR_EDIT_PROFILE:
-      return {...state, errors: action.errors}
+      return { ...state, errors: action.errors }
     case CHANGE_PROFILE:
-      return {...state, isChanged: !state.isChanged}
+      return { ...state, isChanged: !state.isChanged }
     default:
       return state
   }
@@ -37,14 +31,6 @@ export const setUserData = (userData) => ({
   currentUser: userData,
 })
 
-export const toggleShowPassword = () => ({
-  type: TOGGLE_SHOW_PASSWORD_EDIT,
-})
-
-export const toggleShowConfirmPassword = () => ({
-  type: TOGGLE_SHOW_CONFIRM_EDIT,
-})
-
 export const editProfileError = (errors) => ({
   type: ERROR_EDIT_PROFILE,
   errors,
@@ -53,5 +39,23 @@ export const editProfileError = (errors) => ({
 export const profileIsChange = () => ({
   type: CHANGE_PROFILE,
 })
+
+export const editProfile = (fields) => async (dispatch, getState) => {
+  const { email, firstName, secondName, password, id } = { ...getState().profile, ...fields }
+  const response = await editCurrentUser(getState().login.token, id, {email, firstName, secondName, password})
+  if (response.errors) {
+    dispatch(editProfileError(response.errors))
+  } else {
+    dispatch(profileIsChange())
+    dispatch(setUserData(response.data.editUser))
+    dispatch(editProfileError([]))
+    setTimeout((() => dispatch(profileIsChange())), 3000)
+  }
+}
+
+export const setCurrentUserData = () => async (dispatch, getState) => {
+  const response = await getCurrentUserData(getState().login.token)
+  dispatch(setUserData(response.data.currentUser))
+}
 
 export default profileReducer

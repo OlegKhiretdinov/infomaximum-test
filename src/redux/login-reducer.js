@@ -1,11 +1,12 @@
+import { sendLoginData } from "../api/request";
+import { setAuthToken } from "../utils/localStorage";
+
 const SET_TOKEN = 'SET_TOKEN';
 const LOGIN_ERRORS = 'LOGIN_ERRORS';
-const TOGGLE_SHOW_PASSWORD = 'TOGGLE_SHOW_PASSWORD';
 
 const initialState = {
   token: null,
   errors: [],
-  showPassword: false,
 }
 
 const loginReducer = (state = initialState, action) => {
@@ -14,8 +15,6 @@ const loginReducer = (state = initialState, action) => {
       return { ...state, token: action.token}
     case LOGIN_ERRORS:
       return { ...state, errors: action.errors }
-    case TOGGLE_SHOW_PASSWORD:
-      return { ...state, showPassword: !state.showPassword}
     default:
       return state
   }
@@ -31,8 +30,15 @@ export const loginError = (errors) => ({
   errors
 })
 
-export const ToggleShowPassword = () => ({
-  type: TOGGLE_SHOW_PASSWORD,
-})
+export const login = (email, password) => async (dispatch) => {
+  const response = await sendLoginData(email, password)
+  if (response.errors) {
+    dispatch(loginError(response.errors))
+  } else {
+    dispatch(setToken(response.data.login.token));
+    dispatch(loginError([]));
+    setAuthToken(response.data.login.token)
+  }
+}
 
 export default loginReducer

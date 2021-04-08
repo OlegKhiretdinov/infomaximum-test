@@ -49,7 +49,6 @@ const LoginPage = (props) => {
 }
 
 const mapStateToProps = (state) => ({
-  token: state.login.token,
   loginErrors: state.login.errors,
   signUpErrors: state.signUp.errors,
 })
