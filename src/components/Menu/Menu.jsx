@@ -1,16 +1,22 @@
 import { connect } from 'react-redux';
 import { NavLink } from 'react-router-dom';
 import { useState } from 'react';
-
+import { setToken } from '../../redux/login-reducer'
+import { removeAuthToken } from '../../utils/localStorage'
 import cls from './Menu.module.scss';
 import product from '../../assets/product.png';
 import user from '../../assets/user.png';
 import processList from '../../assets/process_list.png';
 
-
 const Menu = (props) => {
 
   const[menuIsOpen, toggleMenu] = useState(false)
+
+  const logOut = () => {
+    props.setToken(null)
+    removeAuthToken()
+  }
+
   return (
     <>
       <div className={cls.menu}>
@@ -18,6 +24,7 @@ const Menu = (props) => {
           <div className={`${cls.button} ${cls.icon} ${cls.close}`}></div>
           <div className={cls.title}>Меню</div>
         </div>
+        <button onClick={logOut}>Logout</button>
       </div>
 
       <div className={`${cls.overlay} ${menuIsOpen ? null : cls.hide}`} onClick={() => toggleMenu(!menuIsOpen)}></div>
@@ -46,4 +53,4 @@ const mapStateToProps = (state) => ({
   userName: state.profile.firstName,
 })
 
-export default connect(mapStateToProps)(Menu);
+export default connect(mapStateToProps, {setToken})(Menu);
